@@ -1,0 +1,106 @@
+﻿<Window x:Class="krastsvetmet.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:krastsvetmet" xmlns:vm="clr-namespace:krastsvetmet.ViewModels"
+        mc:Ignorable="d"
+        Title="Тест" Height="450" Width="800">
+    <Window.DataContext>
+        <vm:MainVM/>
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel VerticalAlignment="Center">
+            <StackPanel.Resources>
+                <Style TargetType="Button">
+                    <Setter Property="Margin" Value="5,10"/>
+                    <Setter Property="Height" Value="25"/>
+                </Style>
+            </StackPanel.Resources>
+            <Button Content="Загрузить список оборудования"
+                    Command="{Binding LoadMachinesCommand}"/>
+            <Button Content="Загрузить номенклатуры"
+                    Command="{Binding LoadNomenclaturesCommand}"
+                    IsEnabled="{Binding Machines.Count}"/>
+            <Button Content="Загрузить партии"
+                    Command="{Binding LoadBatchesCommand}"
+                    IsEnabled="{Binding Nomenclatures.Count}"/>
+            <Button Content="Построить расписание"
+                    Command="{Binding CreateTimetableCommand}"
+                    IsEnabled="{Binding Batches.Count}"/>
+            <Button Content="Сохранить в excel"
+                    Command="{Binding SaveTimetableCommand}"
+                    IsEnabled="{Binding ProductInfos.Count}"/>
+        </StackPanel>
+        <TabControl Grid.Column="1">
+            <TabItem Header="Расписание">
+                <DataGrid AutoGenerateColumns="False" 
+                  ItemsSource="{Binding ProductInfos}" 
+                  IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID партии" 
+                                    Binding="{Binding Batch.Id}" 
+                                    Width="*"/>
+                        <DataGridTextColumn Header="ID оборудования" 
+                                    Binding="{Binding Machine.Id}" 
+                                    Width="*"/>
+                        <DataGridTextColumn Header="Время начала" 
+                                    Binding="{Binding StartTime}" 
+                                    Width="*"/>
+                        <DataGridTextColumn Header="Время окончания" 
+                                    Binding="{Binding EndTime}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Оборудование">
+                <DataGrid AutoGenerateColumns="False" 
+                  ItemsSource="{Binding Machines}" 
+                  IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID оборудования" 
+                                    Binding="{Binding Id}" 
+                                    Width="*"/>
+                        <DataGridTextColumn Header="Имя" 
+                                    Binding="{Binding Name}" 
+                                    Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Номенклатуры">
+                <DataGrid AutoGenerateColumns="False" 
+                  ItemsSource="{Binding Nomenclatures}" 
+                  IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID номенклатуры" 
+                                    Binding="{Binding Id}" 
+                                    Width="*"/>
+                        <DataGridTextColumn Header="Название" 
+                                    Binding="{Binding Name}" 
+                                    Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+            <TabItem Header="Партии">
+                <DataGrid AutoGenerateColumns="False" 
+                  ItemsSource="{Binding Batches}" 
+                  IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="ID партии" 
+                                    Binding="{Binding Id}" 
+                                    Width="*"/>
+                        <DataGridTextColumn Header="ID номенклатуры" 
+                                    Binding="{Binding Nomenclature.Id}" 
+                                    Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </TabItem>
+
+        </TabControl>
+        
+    </Grid>
+</Window>
